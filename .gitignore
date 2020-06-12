@@ -132,3 +132,8 @@ API
 Training
 Blog
 About
+
+.gradle/
+gradle/
+gradlew
+gradlew.bat
