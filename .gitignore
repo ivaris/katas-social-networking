@@ -137,3 +137,4 @@ About
 gradle/
 gradlew
 gradlew.bat
+/build/*
