@@ -31,10 +31,11 @@ public class TimeUtil {
     }else if(duration.toMinutes()<60) {
       System.out.println(String.format(TimeLineEnum.MINUTE.toString(),duration.toMinutes()));
       return String.format(TimeLineEnum.MINUTE.toString(), duration.toMinutes());
-    }else if(duration.toHours()<60) {
+    }else if(duration.toHours()<24) {
       System.out.println(String.format(TimeLineEnum.HOUR.toString(),duration.toHours()));
       return String.format(TimeLineEnum.HOUR.toString(), duration.toHours());
     }else if(duration.toDays()<31) {
+      System.out.println(String.format(TimeLineEnum.DAY.toString(),duration.toDays()));
       return String.format(TimeLineEnum.DAY.toString(), duration.toDays());
     }else if(duration.toDays()/365>1) {
       System.out.println(String.format(TimeLineEnum.YEARS.toString(),duration.toDays()/365));
