@@ -69,5 +69,25 @@ public class TimelineServiceTest {
     assert messages.contains("test message 02");
 
   }
+@Test
+  public void feature02_testFollowUserOrderTest(){
+    charlietimeLineService = new TimeLineService("charlie");
+    charlietimeLineService.publishToTimeline(new TimelineMessage("test message 03"));
+    charlietimeLineService.publishToTimeline(new TimelineMessage("test message 04"));
+    bobTimeLineService = new TimeLineService("bob");
+    bobTimeLineService.publishToTimeline(new TimelineMessage("test message 02"));
+    aliceTimeLineService = new TimeLineService("alice");
+    aliceTimeLineService.publishToTimeline(new TimelineMessage("test message 01"));
+
+
+    Set<String> followUsers = new HashSet<>();
+    followUsers.add("alice");
+    followUsers.add("bob");
+    charlietimeLineService.follow(followUsers);
+    String messages = charlietimeLineService.viewTimeline(Optional.empty());
+    assert messages.indexOf("test message 01")<messages.indexOf("test message 04");
+    assert messages.indexOf("test message 02")< messages.indexOf("test message 03");
+
+  }
 
 }
