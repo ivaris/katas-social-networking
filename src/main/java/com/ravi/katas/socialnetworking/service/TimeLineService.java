@@ -5,6 +5,7 @@ import com.ravi.katas.socialnetworking.util.TimeUtil;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,21 +32,23 @@ public class TimeLineService {
   }
 
   public String viewTimeline(Optional<String> user) {
-    List<String> messages = getMessages(user.orElse(getUser()));
+    List<TimelineMessage> messages = getMessages(user.orElse(getUser()));
     if(follows.size()>0){
       follows.stream().forEach(follow-> {
         messages.addAll(getMessages(follow));
       });
     }
-    return String.join("\\n\\r", messages);
+   List<String> userMessages = messages.stream().sorted(
+       (o1, o2) -> o1.getCreateDate().isBefore(o2.getCreateDate())?1:-1).map(timeline->
+        new StringBuilder().append(timeline.getMessage()).append(" (").append(timeUtil.getDifference(
+            LocalDateTime.now(),timeline.getCreateDate())).append(")").toString()).collect(
+        Collectors.toList());
+    userMessages.stream().forEach(userMessage->{System.out.println(userMessage);});
+    return String.join("\\n\\r", userMessages);
   }
 
-  private List<String> getMessages(String user) {
-    return timeline.getOrDefault(user, new ArrayList<>()).stream().map(timeline->
-      new StringBuilder().append(timeline.getMessage()).append(" (").append(timeUtil.getDifference(
-          LocalDateTime.now(),timeline.getCreateDate())).append(")").toString()
-    ).collect(
-        Collectors.toList());
+  private List<TimelineMessage> getMessages(String user) {
+    return timeline.getOrDefault(user, new ArrayList<>());
   }
 
   public String getUser() {
